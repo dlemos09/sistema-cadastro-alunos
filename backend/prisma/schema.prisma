@@ -1,0 +1,29 @@
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Aluno {
+  id         Int         @id @default(autoincrement())
+  nome       String
+  email      String      @unique
+  cpf        String      @unique
+  ativo      Boolean     @default(true)
+  createdAt  DateTime    @default(now())
+  matriculas Matricula[]
+}
+
+model Matricula {
+  id             Int      @id @default(autoincrement())
+  dataMatricula  DateTime
+  createdAt      DateTime @default(now())
+  ativo          Boolean  @default(true)
+  dataInativacao DateTime?
+  alunoId Int
+  aluno    Aluno @relation(fields: [alunoId], references: [id])
+}
